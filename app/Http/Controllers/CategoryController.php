@@ -14,7 +14,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        return Category::paginate();
     }
 
     /**
@@ -35,7 +35,21 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $category = new Category();
+        $category->name = $request->name;
+        $result = $category->save();
+
+        if($result){
+            return response()->json([
+                'ok'        => true, 
+                'msg'       => 'Se ha creado la categoría con éxito.'                
+            ], 201);
+        }
+
+        return response()->json([
+            'ok'        => false, 
+            'msg'       => 'Error al crear la categoría.'                
+        ], 500);
     }
 
     /**
@@ -57,7 +71,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+        
     }
 
     /**
@@ -69,7 +83,20 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        $category->name = $request->name;
+        $result = $category->save();
+
+        if($result){
+            return response()->json([
+                'ok'        => true, 
+                'msg'       => 'Se ha actualizado la categoría con éxito.'                
+            ], 200);
+        }
+
+        return response()->json([
+            'ok'        => false, 
+            'msg'       => 'Error al actualizar la categoría.'                
+        ], 500);
     }
 
     /**
@@ -80,6 +107,18 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        $result = $category->delete();
+
+        if($result){
+            return response()->json([
+                'ok'        => true, 
+                'msg'       => 'Se ha eliminado la categoría.'                
+            ], 200);
+        }
+
+        return response()->json([
+            'ok'        => false, 
+            'msg'       => 'Error al eliminar la categoría.'                
+        ], 500);
     }
 }
