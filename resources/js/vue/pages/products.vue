@@ -43,8 +43,14 @@
           {{ data.value.name }}
         </template>
         <template #cell(actions)="data">
-          <b-button variant="outline-primary" size="sm" class="mr-2"> Editar </b-button>
-          <b-button @click="eliminar(data.item.id)" variant="outline-danger" size="sm"> Eliminar </b-button>
+          <b-button 
+          :to="{ name: 'products', params: { id: data.item.id }}"
+          variant="outline-primary" 
+          size="sm" 
+          class="mr-2"> 
+          Editar 
+          </b-button>
+          <b-button @click="eliminar(data.item.id)" variant="outline-danger" size="sm"> Eliminar </b-button>           
         </template>
       </b-table>
 

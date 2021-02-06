@@ -26,6 +26,7 @@
               <b-form-input
                 id="input-2"
                 type="number"
+                step="any"
                 v-model="product.price"
                 placeholder="xx.xx"
                 required
@@ -79,15 +80,23 @@ import Swal from 'sweetalert2';
 export default {
   name: "Product",
   methods: {
-      save(){
-          console.log(this.product);
-          var url = `${Global.URL_API}/products`;    
-          axios.post(url , this.product)
-          .then( res => {
-              console.log(res.data);
-              Swal.fire(res.data.msg, '', 'success')
-          })
-          .catch( err => console.log(err))
+      save(){          
+          var url = `${Global.URL_API}/products`;                
+
+          if(this.product.id !== ""){
+            axios.patch(`${url}/${this.product.id}` , this.product)
+            .then( res => {             
+                Swal.fire(res.data.msg, '', 'success')
+            })
+            .catch( err => console.log(err))
+          }
+          else{    
+            axios.post(url , this.product)
+            .then( res => {             
+                Swal.fire(res.data.msg, '', 'success')
+            })
+            .catch( err => console.log(err))
+          }
       },
       getCategories(){
           var url = `${Global.URL_API}/categories`;
@@ -95,6 +104,15 @@ export default {
           axios.get(url)
           .then( res => {
               this.categories = res.data;              
+          })
+          .catch( err => console.log(err))            
+      }, 
+      getProduct(id){
+          var url = `${Global.URL_API}/products/${id}`;
+
+          axios.get(url)
+          .then( res => {              
+              this.product = res.data;              
           })
           .catch( err => console.log(err))            
       }, 
@@ -117,7 +135,7 @@ export default {
       this.getCategories();
 
       if(id !== "nuevo"){
-        //   obtione el produto
+        this.getProduct(id);
       }
   }
 
