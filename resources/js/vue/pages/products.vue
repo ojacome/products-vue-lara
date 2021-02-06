@@ -5,7 +5,7 @@
         <h2>Administrar Productos</h2>
       </div>
       <div class="col-md-6 text-right">
-        <button class="btn btn-info">Nuevo Producto</button>
+        <b-button variant="info" to="/products/nuevo">Nuevo Producto</b-button>
       </div>
     </div>
 
