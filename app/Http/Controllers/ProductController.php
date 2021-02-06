@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
@@ -14,7 +16,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        return Product::with('category')->simplePaginate();
     }
 
     /**
@@ -35,7 +37,39 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //validaciones                            
+        $validator = Validator::make($request->all(), Product::$rules, Product::$messages);
+        
+        if ($validator->fails()) {
+            return response()->json([
+                'ok'        => false,
+                'errors'    => $validator->errors()->all()
+            ], 400);
+        }
+
+        $category_id = $request->input('category_id');
+        $category = Category::find($category_id);
+        if(!$category){
+            return response()->json([
+                'ok'        => false, 
+                'msg'       => 'No se encuentra categoria con id: '.$category_id                
+            ], 400);
+        }
+
+        $result = Product::create($request->all());    
+        
+        if($result){
+            return response()->json([
+                'ok'        => true, 
+                'msg'       => 'Se ha creado el producto.'                
+            ], 201);
+        }
+
+        return response()->json([
+            'ok'        => false, 
+            'msg'       => 'Error al crear el producto.'                
+        ], 500);
+        
     }
 
     /**
@@ -57,7 +91,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        
     }
 
     /**
@@ -69,7 +103,39 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        //validaciones                            
+        $validator = Validator::make($request->all(), Product::$rules, Product::$messages);
+        
+        if ($validator->fails()) {
+            return response()->json([
+                'ok'        => false,
+                'errors'    => $validator->errors()->all()
+            ], 400);
+        }
+
+        $category_id = $request->input('category_id');
+        $category = Category::find($category_id);
+        if(!$category){
+            return response()->json([
+                'ok'        => false, 
+                'msg'       => 'No se encuentra categoria con id: '.$category_id                
+            ], 400);
+        }
+        
+        $product->fill($request->all());
+        $result = $product->save();
+
+        if($result){
+            return response()->json([
+                'ok'        => true, 
+                'msg'       => 'Se ha actualizado el producto.'                
+            ], 200);
+        }
+
+        return response()->json([
+            'ok'        => false, 
+            'msg'       => 'Error al actualizar el producto.'                
+        ], 500);
     }
 
     /**
@@ -80,6 +146,18 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        $result = $product->delete();
+
+        if($result){
+            return response()->json([
+                'ok'        => true, 
+                'msg'       => 'Se ha eliminado el producto.'                
+            ], 200);
+        }
+
+        return response()->json([
+            'ok'        => false, 
+            'msg'       => 'Error al eliminar el producto.'                
+        ], 500);
     }
 }
