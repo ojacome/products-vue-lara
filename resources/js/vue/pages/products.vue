@@ -29,6 +29,8 @@
       <b-table 
       hover 
       show-empty
+      responsive
+      sort-icon-left
       :items="products" 
       :fields="fields" 
       :filter="filter"
@@ -40,9 +42,9 @@
         <template #cell(category)="data">
           {{ data.value.name }}
         </template>
-        <template #cell(actions)>
-          <b-button size="sm" class="mr-2"> Editar </b-button>
-          <b-button size="sm"> Eliminar </b-button>
+        <template #cell(actions)="data">
+          <b-button variant="outline-primary" size="sm" class="mr-2"> Editar </b-button>
+          <b-button @click="eliminar(data.item.id)" variant="outline-danger" size="sm"> Eliminar </b-button>
         </template>
       </b-table>
 
@@ -62,6 +64,9 @@
 <script>
 import Axios from "axios";
 import Loading from '../components/loading';
+import Swal from 'sweetalert2';
+import { Global } from '../global/index'
+
 
 export default {
   name: "Products",
@@ -74,14 +79,13 @@ export default {
   methods: {
     getProducts() {
       this.cargando = true;
-      var url = "http://localhost:8000/api/products";
+      var url = `${Global.URL_API}/products`;
       Axios.get(url)
         .then((res) => {
           this.cargando = false;
           if (res.data) {
             this.products = res.data;
-            this.rows = this.products.length;
-            console.log(this.products);
+            this.rows = this.products.length;            
           }
         })
         .catch((err) => {
@@ -92,12 +96,40 @@ export default {
     onFiltered(filteredItems) {        
         this.rows = filteredItems.length
         this.currentPage = 1
-      }
+      },
+    eliminar(id){
+      Swal.fire({
+        title: '¿Seguro de eliminar?',
+        text: 'No podrás recuperar la información del producto.',        
+        showCancelButton: true,
+        confirmButtonText: `Eliminar`,        
+      }).then((result) => {        
+        if (result.isConfirmed) {
+          var url = `${Global.URL_API}/products/${id}`;
+          Axios.delete(url)
+          .then(() => {  
+                                  
+            Swal.fire('Producto eliminado!', '', 'success')
+            this.getProducts();
+          })
+          .catch((err) => {            
+            console.log(err);
+          });
+        } 
+      })
+    }
   },
   data() {
     return {
-      products: [],
-      fields: ["id", "name", "category", "stock", "price", "actions"],
+      products: [],      
+      fields: [
+        { key: "id" ,       sortable: true },
+        { key: "name" ,     sortable: true },
+        { key: "category" , sortable: true },
+        { key: "stock" ,    sortable: true },
+        { key: "price" ,    sortable: true },
+        { key: "actions" ,    class:  "text-right"},
+      ],
       filterOn: ["name"],
       rows: 1,
       currentPage: 1,
