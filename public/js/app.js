@@ -1845,6 +1845,44 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -1853,11 +1891,31 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 var default_layout = "default";
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   computed: {},
+  mounted: function mounted() {
+    this.getProducts();
+  },
+  methods: {
+    getProducts: function getProducts() {
+      var _this = this;
+
+      var url = "http://localhost:8000/api/products";
+      axios__WEBPACK_IMPORTED_MODULE_0___default().get(url).then(function (res) {
+        if (res.data) {
+          _this.products = res.data.data;
+          console.log(_this.products);
+        }
+      })["catch"](function (err) {
+        console.log(err);
+      });
+    }
+  },
   data: function data() {
     return {
-      message: 'Hello World'
+      products: [],
+      fields: ['id', 'name', 'category', 'stock', 'price', 'actions']
     };
   }
 });
@@ -64922,20 +64980,98 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "container" },
     [
-      _c("h1", [_vm._v(_vm._s(_vm.message))]),
+      _c(
+        "b-navbar",
+        { attrs: { toggleable: "lg", type: "dark", variant: "info" } },
+        [
+          _c("b-navbar-brand", { attrs: { href: "#" } }, [
+            _vm._v("ProductsApp")
+          ]),
+          _vm._v(" "),
+          _c("b-navbar-toggle", { attrs: { target: "nav-collapse" } }),
+          _vm._v(" "),
+          _c(
+            "b-collapse",
+            { attrs: { id: "nav-collapse", "is-nav": "" } },
+            [
+              _c(
+                "b-navbar-nav",
+                [_c("b-nav-item", { attrs: { href: "#" } }, [_vm._v("Link")])],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
       _vm._v(" "),
-      _c("button", { staticClass: "btn btn-outline-success" }, [
-        _vm._v("Guardar")
-      ]),
-      _vm._v(" "),
-      _c("b-button", { attrs: { variant: "danger" } }, [_vm._v("Button")])
+      _c("div", { staticClass: "container mt-5" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "row mt-5" },
+          [
+            _c("b-table", {
+              attrs: { hover: "", items: _vm.products, fields: _vm.fields },
+              scopedSlots: _vm._u([
+                {
+                  key: "cell(category)",
+                  fn: function(data) {
+                    return [
+                      _vm._v(
+                        "\n          " + _vm._s(data.value.name) + "\n        "
+                      )
+                    ]
+                  }
+                },
+                {
+                  key: "cell(actions)",
+                  fn: function() {
+                    return [
+                      _c(
+                        "b-button",
+                        { staticClass: "mr-2", attrs: { size: "sm" } },
+                        [_vm._v("\n            Editar\n          ")]
+                      ),
+                      _vm._v(" "),
+                      _c("b-button", { attrs: { size: "sm" } }, [
+                        _vm._v("\n            Eliminar\n          ")
+                      ])
+                    ]
+                  },
+                  proxy: true
+                }
+              ])
+            })
+          ],
+          1
+        )
+      ])
     ],
     1
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-md-6" }, [
+        _c("h2", [_vm._v("Administrar Productos")])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-md-6 text-right" }, [
+        _c("button", { staticClass: "btn btn-primary" }, [
+          _vm._v("Nuevo Producto")
+        ])
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -77085,6 +77221,18 @@ Vue.compile = compileToFunctions;
 /******/ 	// It's empty as some runtime module handles the default behavior
 /******/ 	__webpack_require__.x = x => {};
 /************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
