@@ -16,6 +16,9 @@
         <b-navbar-nav>
           <b-nav-item active-class="active"  to="/categories">Categories</b-nav-item>
         </b-navbar-nav>
+        <b-navbar-nav>
+          <b-nav-item active-class="active"  to="/tasks">Tasks</b-nav-item>
+        </b-navbar-nav>
       </b-collapse>
     </b-navbar>
   </div>
