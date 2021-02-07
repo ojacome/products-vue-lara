@@ -1,22 +1,23 @@
 <template>
   <div class="container my-5">
     <div class="row">
-      <div class="col-md-6 mx-auto">
+      <div class="col-md-9 mx-auto">
         <div class="row">
           <div class="col-md-6">
             <h2>Administrar Categorías</h2>
           </div>
           <div class="col-md-6 text-right">
-            <b-button @click="showModal('nuevo')" variant="info"
-              >Nueva Categoría</b-button
-            >
+            <b-button @click="showModal('nuevo')" variant="info">
+              <i class="fa fa-plus"></i>
+              Nueva Categoría
+            </b-button>
           </div>
         </div>
       </div>
     </div>
 
     <div class="row mt-3">
-      <div class="col-md-6 mx-auto">
+      <div class="col-md-9 mx-auto">
         <b-form inline>
           <label class="mr-sm-2" for="filter-input">Buscar: </label>
           <b-form-input
@@ -29,10 +30,14 @@
       </div>
     </div>
 
-    <Loading v-if="cargando" />
+    <div class="row" v-if="cargando" >
+      <div class="col-md-9 mx-auto">
+        <Loading />
+      </div>
+    </div>
 
-    <div class="row mt-3" v-if="!cargando">
-      <div class="col-md-6 mx-auto">
+    <div class="row mt-3 animate__animated animate__fadeIn" v-if="!cargando">
+      <div class="col-md-9 mx-auto">
         <b-table
           hover
           show-empty
@@ -53,14 +58,14 @@
               size="sm"
               class="mr-2"
             >
-              Editar
+              <i class="fa fa-pencil"></i>
             </b-button>
             <b-button
               @click="eliminar(data.item.id)"
               variant="outline-danger"
               size="sm"
             >
-              Eliminar
+              <i class="fa fa-trash"></i>
             </b-button>
           </template>
         </b-table>
@@ -69,7 +74,7 @@
           v-model="currentPage"
           :total-rows="rows"
           :per-page="perPage"
-          align="fill"
+          
           pills
           class="my-0"
         ></b-pagination>

@@ -5,7 +5,10 @@
         <h2>Administrar Productos</h2>
       </div>
       <div class="col-md-6 text-right">
-        <b-button variant="info" to="/products/nuevo">Nuevo Producto</b-button>
+        <b-button variant="info" to="/products/nuevo">
+          <i class="fa fa-plus"></i>
+          Nuevo Producto
+        </b-button>
       </div>
     </div>
 
@@ -25,7 +28,7 @@
 
     <Loading v-if="cargando"/>
 
-    <div class="row mt-3" v-if="!cargando">
+    <div class="row mt-3 animate__animated animate__fadeIn" v-if="!cargando">
       <b-table 
       hover 
       show-empty
@@ -48,9 +51,11 @@
           variant="outline-primary" 
           size="sm" 
           class="mr-2"> 
-          Editar 
+          <i class="fa fa-pencil"></i>
           </b-button>
-          <b-button @click="eliminar(data.item.id)" variant="outline-danger" size="sm"> Eliminar </b-button>           
+          <b-button @click="eliminar(data.item.id)" variant="outline-danger" size="sm">
+             <i class="fa fa-trash"></i>
+          </b-button>           
         </template>
       </b-table>
 

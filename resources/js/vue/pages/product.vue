@@ -1,6 +1,6 @@
 <template>
   <div class="container my-5">
-    <div class="row">
+    <div class="row animate__animated animate__fadeIn">
       <div class="col-md-6 mx-auto">
         <b-card class="mt-3" header="Producto">
           <b-form @submit.prevent="save()" @reset="onReset">
@@ -85,8 +85,14 @@
               </b-form-invalid-feedback>
             </b-form-group>
 
-            <b-button :disabled="$v.$invalid" type="submit" variant="success">Guardar</b-button>
-            <b-button type="reset" variant="secondary">Reset</b-button>
+            <b-button :disabled="$v.$invalid" type="submit" variant="success">
+              <i class="fa fa-check"></i>
+              Guardar
+            </b-button>
+            <b-button type="reset" variant="secondary">
+              <i class="fa fa-close"></i>
+              Reset
+            </b-button>
           </b-form>
         </b-card>
       </div>

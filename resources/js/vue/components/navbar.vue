@@ -1,7 +1,11 @@
 <template>
   <div>
     <b-navbar toggleable="lg" type="dark" variant="info">
-      <b-navbar-brand to="/">ProductsApp</b-navbar-brand>
+      <b-navbar-brand to="/">
+        <!-- <img src="/img/vue.png'" class="d-inline-block align-top" alt="Kitten"> -->
+        <img :src="'/img/lara.png'" height="40" alt="Kitten">
+        ProductsApp
+      </b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
