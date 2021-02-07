@@ -7,7 +7,9 @@
             <h2>Administrar Categorías</h2>
           </div>
           <div class="col-md-6 text-right">
-            <b-button variant="info">Nueva Categoría</b-button>
+            <b-button @click="showModal('nuevo')" variant="info"
+              >Nueva Categoría</b-button
+            >
           </div>
         </div>
       </div>
@@ -45,7 +47,12 @@
           @filtered="onFiltered"
         >
           <template #cell(actions)="data">
-            <b-button variant="outline-primary" size="sm" class="mr-2">
+            <b-button
+              variant="outline-primary"
+              @click="showModal(data.item.id)"
+              size="sm"
+              class="mr-2"
+            >
               Editar
             </b-button>
             <b-button
@@ -68,6 +75,30 @@
         ></b-pagination>
       </div>
     </div>
+
+    <b-modal
+      id="modal-category"
+      ref="modal-category"
+      title="Categoría"
+      @ok="handleOk"
+    >
+      <form ref="form" @submit.stop.prevent="handleSubmit">
+        <b-form-group label="Nombre" label-for="name-input">
+          <b-form-input
+            id="name-input"
+            placeholder="Nombre de la categoría"
+            v-model="category.name"
+            :state="$v.category.name.required && $v.category.name.minLength"
+            required
+          ></b-form-input>
+          <b-form-invalid-feedback
+            :state="$v.category.name.required && $v.category.name.minLength"
+          >
+            El nombre es requerido, mínimo 2 caracteres.
+          </b-form-invalid-feedback>
+        </b-form-group>
+      </form>
+    </b-modal>
   </div>
 </template>
 
@@ -76,6 +107,8 @@ import axios from "axios";
 import { Global } from "../global";
 import Swal from "sweetalert2";
 import Loading from "../components/loading.vue";
+import CategoryModel from "../models/category.model";
+import { required, minLength } from "vuelidate/lib/validators";
 
 export default {
   components: { Loading },
@@ -83,9 +116,15 @@ export default {
   mounted() {
     this.getCategories();
   },
+  validations: {
+    category: {
+      name: { required, minLength: minLength(2) },
+    },
+  },
   data() {
     return {
       categories: [],
+      category: new CategoryModel("", ""),
       fields: [
         { key: "id", sortable: true },
         { key: "name", sortable: true },
@@ -137,11 +176,60 @@ export default {
               Swal.fire("Categoría eliminada!", "", "success");
               this.getCategories();
             })
-            .catch((err) => {              
+            .catch((err) => {
               Swal.fire(err.response.data.msg, "", "warning");
             });
         }
       });
+    },
+    handleOk(bvModalEvt) {
+      // Prevent modal from closing
+      bvModalEvt.preventDefault();
+      // Trigger submit handler
+      this.handleSubmit();
+    },
+    handleSubmit() {
+      // validar formulario
+      if (this.$v.$invalid) {
+        return;
+      }
+
+      if (this.category.id !== "") {
+        var url = `${Global.URL_API}/categories/${this.category.id}`;
+        axios
+          .patch(url, this.category)
+          .then(() => {
+            Swal.fire("Categoría actualizada!", "", "success");
+            this.getCategories();
+          })
+          .catch((err) => {
+            Swal.fire(err.response.data.msg, "", "warning");
+          });
+      } else {
+        var url = `${Global.URL_API}/categories`;
+        axios
+          .post(url, this.category)
+          .then(() => {
+            Swal.fire("Categoría creada!", "", "success");
+            this.getCategories();
+          })
+          .catch((err) => {
+            Swal.fire(err.response.data.msg, "", "warning");
+          });
+      }
+
+      // Hide the modal manually
+      this.$nextTick(() => {
+        this.$bvModal.hide("modal-category");
+      });
+    },
+    showModal(id) {
+      if (id === "nuevo") {
+        this.category = new CategoryModel("", "");
+      } else {
+        this.category = this.categories.find((c) => c.id === id);
+      }
+      this.$refs["modal-category"].show();
     },
   },
 };
