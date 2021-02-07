@@ -60,7 +60,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        //
+        return $category;
     }
 
     /**
@@ -107,18 +107,21 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        $result = $category->delete();
+        if( $category->products()->count() === 0){
+            
+            $category->delete();
 
-        if($result){
             return response()->json([
                 'ok'        => true, 
                 'msg'       => 'Se ha eliminado la categoría.'                
             ], 200);
+            
         }
-
-        return response()->json([
-            'ok'        => false, 
-            'msg'       => 'Error al eliminar la categoría.'                
-        ], 500);
+        else {
+            return response()->json([
+                'ok'        => false, 
+                'msg'       => 'La categoría no puede ser eliminada porque está en uso.'                
+            ], 400);
+        }
     }
 }
